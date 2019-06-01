@@ -22,14 +22,22 @@ namespace Models.DAO
             return entity.ID;
         }
 
-        public bool Login(string userName, string password)
+        public int Login(string userName, string password)
         {
-            var res = context.Users.Count(x => x.UserName == userName && x.Password == password);
-            if(res > 0)
+            var res = context.Users.SingleOrDefault(x => x.UserName == userName);
+            if(res == null)
             {
-                return true;
+                return 0;
             }
-            return false;
+            else if(res.Password != password)
+            {
+                return -1;
+            }
+            else if(res.Status == false)
+            {
+                return -2;
+            }
+            return 1;
         }
 
         public User GetUserByUserName(string userName)

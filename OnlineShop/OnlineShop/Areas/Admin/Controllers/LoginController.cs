@@ -21,8 +21,8 @@ namespace OnlineShop.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 UserDao dao = new UserDao();
-                bool res = dao.Login(model.UserName, model.Password);
-                if(res == true)
+                int res = dao.Login(model.UserName, MaHoaMD5.GetMD5(model.Password));
+                if(res == 1)
                 {
                     var user = dao.GetUserByUserName(model.UserName);
                     UserLoginCommon userSession = new UserLoginCommon();
@@ -30,10 +30,19 @@ namespace OnlineShop.Areas.Admin.Controllers
                     userSession.UserID = user.ID;
                     return RedirectToAction("Index", "Home");
                 }
-                else
+                else if(res == 0)
                 {
-                    ModelState.AddModelError("", "UserName hoac Password khong dung!");
+                    ModelState.AddModelError("", "Username khong dung!");
                 }
+                else if(res == -1)
+                {
+                    ModelState.AddModelError("", "Password khong dung!");
+                }
+                else if(res == -2)
+                {
+                    ModelState.AddModelError("", "Tai khoan nay da bi khoa!");
+                }
+
             }
             return View("Index");
         }
