@@ -27,7 +27,7 @@ namespace OnlineShop.Areas.Admin.Controllers
                     var user = dao.GetUserByUserName(model.UserName);
                     UserLoginCommon userSession = new UserLoginCommon();
                     userSession.UserName = user.UserName;
-                    userSession.UserName = user.Password;
+                    userSession.UserID = user.ID;
                     return RedirectToAction("Index", "Home");
                 }
                 else
